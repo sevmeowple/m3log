@@ -14,6 +14,30 @@
           "path": "**/**"
         }
       ]
+    },
+    {
+      "identifier": "fs:read-all",
+      "allow": [
+        {
+          "path": "**/**"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:write-all",
+      "allow": [
+        {
+          "path": "**/**"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:allow-unwatch",
+      "allow": [
+        {
+          "path": "**/**"
+        }
+      ]
     }
   ]
 }

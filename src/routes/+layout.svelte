@@ -16,18 +16,12 @@
   import { sidebarStyle } from "./style";
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import * as Tooltip from "$lib/components/ui/tooltip/index.js";
-  // const { toggle } = useSidebar();
 
   const items = [
     {
       title: "Home",
       url: "/",
       icon: House,
-    },
-    {
-      title: "Setting",
-      url: "/setting",
-      icon: Settings,
     },
     {
       title: "Logger",
@@ -88,6 +82,7 @@
     </div>
   </Sidebar.Provider>
 </div>
+
 
 <style>
 </style>
