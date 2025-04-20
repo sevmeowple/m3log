@@ -17,6 +17,8 @@ m3log 是一个遵循自定义日志协议标准的日志查看和分析工具�
 
 更多详情请查看 [协议标准文档](./v1.md)
 
+示例logger输出实现见 [m3log-impl](https://github.com/sevmeowple/m3log-impl)
+
 ## 开发环境设置
 
 - [VS Code](https://code.visualstudio.com/)
