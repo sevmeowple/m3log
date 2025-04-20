@@ -1,5 +1,6 @@
 <script lang="ts">
   import { LoggerPlugin } from "$lib/plugins/logger/index.svelte";
+  import type { Log } from "$lib/plugins/m3log/type";
   import { onMount, onDestroy } from "svelte";
   import { Toaster } from "svelte-sonner";
   import { Button } from "$lib/components/ui/button";
@@ -14,20 +15,30 @@
   import { Separator } from "$lib/components/ui/separator";
   import { Badge } from "$lib/components/ui/badge";
 
-  let watchPath = "C:\\Src\\SevFoxie\\Any\\MeowFun\\logs\\1.log";
+  // let watchPath = "C:\\Your\\Log\\Path"; // 默认日志路径
   let searchQuery = "";
   let selectedLevel = "";
 
+  // 新增：定义内容展开状态和最大显示字符数
+  const MAX_CONTENT_LENGTH = 200;
+  let expandedLogs = new Map<string, boolean>();
+
+  // 切换日志展开状态的函数
+  function toggleExpand(logId: string) {
+    expandedLogs.set(logId, !expandedLogs.get(logId));
+    expandedLogs = expandedLogs; // 触发响应式更新
+  }
+
   onMount(() => {
-    LoggerPlugin.setWatchPath(watchPath);
+    LoggerPlugin.setWatchPath(LoggerPlugin.watchPath);
   });
 
-  onDestroy(async () => {
-    await LoggerPlugin.stopWatching();
-  });
+  // onDestroy(async () => {
+  //   await LoggerPlugin.stopWatching();
+  // });
 
   function handlePathChange() {
-    LoggerPlugin.setWatchPath(watchPath);
+    LoggerPlugin.setWatchPath(LoggerPlugin.watchPath);
   }
 
   function handleSearchChange() {
@@ -64,7 +75,7 @@
           <Input
             id="path"
             type="text"
-            bind:value={watchPath}
+            bind:value={LoggerPlugin.watchPath}
             onchange={handlePathChange}
             placeholder="日志文件或目录路径"
           />
@@ -88,9 +99,15 @@
 
       <div class="flex gap-4 mb-4 items-end">
         <div class="w-48">
-          <label for="level" class="text-sm font-medium mb-1 block">日志级别</label>
-          
-          <Select.Root type="single" bind:value={selectedLevel} onValueChange={handleLevelChange}>
+          <label for="level" class="text-sm font-medium mb-1 block"
+            >日志级别</label
+          >
+
+          <Select.Root
+            type="single"
+            bind:value={selectedLevel}
+            onValueChange={handleLevelChange}
+          >
             <Select.Trigger id="level" class="w-full">
               {selectedLevel || "所有级别"}
             </Select.Trigger>
@@ -136,7 +153,7 @@
           </div>
         {:else}
           <div class="divide-y">
-            {#each LoggerPlugin.displayLogs as log}
+            {#each LoggerPlugin.displayLogs as log, index}
               <div
                 class="p-4 hover:bg-muted/50 transition-colors"
                 class:bg-red-50={log.level === "ERROR"}
@@ -167,7 +184,29 @@
                   {/each}
                 </div>
 
-                <div class="text-sm mt-2">{log.content}</div>
+                <div class="text-sm mt-2">
+                  {#if log.content.length > MAX_CONTENT_LENGTH && !expandedLogs.get(`log-${index}`)}
+                    {log.content.substring(0, MAX_CONTENT_LENGTH)}...
+                    <Badge
+                      variant="outline"
+                      class="text-xs ml-1 cursor-pointer hover:bg-primary/10"
+                      onclick={() => toggleExpand(`log-${index}`)}
+                    >
+                      展开
+                    </Badge>
+                  {:else}
+                    {log.content}
+                    {#if log.content.length > MAX_CONTENT_LENGTH}
+                      <Badge
+                        variant="outline"
+                        class="text-xs ml-1 cursor-pointer hover:bg-primary/10"
+                        onclick={() => toggleExpand(`log-${index}`)}
+                      >
+                        收起
+                      </Badge>
+                    {/if}
+                  {/if}
+                </div>
               </div>
             {/each}
           </div>
