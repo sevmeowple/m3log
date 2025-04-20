@@ -2,6 +2,9 @@
 
 一个基于简单易用的日志协议的多平台日志工具，使用 Tauri + SvelteKit + TypeScript 构建。
 
+<img width="1184" alt="image" src="https://github.com/user-attachments/assets/0b0fa536-6173-49e3-8706-76099b3f9494" />
+
+
 ## 项目介绍
 
 m3log 是一个遵循自定义日志协议标准的日志查看和分析工具。该工具提供简洁的用户界面，支持多平台运行，能够高效处理和分析日志数据。
